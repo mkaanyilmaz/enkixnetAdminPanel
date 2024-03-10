@@ -1,0 +1,27 @@
+<p>products works!</p>
+
+<p-table
+  [value]="products"
+  [lazy]="true"
+  (onLazyLoad)="loadProducts($event)"
+  responsiveLayout="scroll"
+  [paginator]="true"
+  [rows]="10"
+  [totalRecords]="products.length"
+  [loading]="products ? false : true"
+  [globalFilterFields]="['name']"
+  class="m-5"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="name">
+        Products <p-sortIcon field="name"></p-sortIcon>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-products>
+    <tr>
+      <td>{{ products.ProductName }}</td>
+    </tr>
+  </ng-template>
+</p-table>
