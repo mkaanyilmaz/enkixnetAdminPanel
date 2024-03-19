@@ -1,0 +1,198 @@
+<div class="row">
+  <div class="col-md-12 d-flex justify-content-center text-right">
+    <div class="wrapper text-end">
+      <p-table
+        [value]="filterCategories()"
+        [lazy]="true"
+        (onLazyLoad)="loadCategories()"
+        responsiveLayout="scroll"
+        [paginator]="true"
+        [rows]="10"
+        [totalRecords]="categories.length"
+        [loading]="categories ? false : true"
+        [globalFilterFields]="['name']"
+        class="m-5"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="name">
+              CategoryName <p-sortIcon field="name"></p-sortIcon>
+            </th>
+            <th pSortableColumn="name">
+              Sub category <p-sortIcon field="name"></p-sortIcon>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-category>
+          <tr>
+            <td>{{ category.name }}</td>
+            <td>
+              <button
+                type="button"
+                class="btn btn-primary text-right"
+                data-toggle="modal"
+                data-target=".bd-example-modal-lg"
+                (click)="openSubcategoryModal(category.categoryId)"
+              >
+                Show/Add Sub Category
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <button
+        type="button"
+        class="btn btn-primary mt-5 text-right"
+        data-toggle="modal"
+        data-target=".bd-example-modal-lg"
+        (click)="showModal()"
+      >
+        Add Category
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Large modal -->
+<div
+  class="modal fade bd-example-modal-lg"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myLargeModalLabel"
+  aria-hidden="true"
+  *ngIf="openModal"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myLargeModalLabel">Add Category</h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <h2>Create Category</h2>
+          <form (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="categoryName">Category Name:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="categoryName"
+                [(ngModel)]="categoryName"
+                name="categoryName"
+                required
+              />
+            </div>
+            <div class="form-group" *ngIf="categories.length > 0">
+              <label for="parentCategory">Parent Category:</label>
+              <select
+                class="form-control"
+                id="parentCategory"
+                name="parentCategoryId"
+                [(ngModel)]="parentCategoryId"
+                (ngModelChange)="onSelect($event)"
+              >
+                <option [ngValue]="''">Seçiniz</option>
+                <option
+                  *ngFor="let category of categoriesWithoutParent"
+                  [ngValue]="category.categoryId"
+                >
+                  {{ category.name }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group" *ngIf="isSubAvailable">
+              <label for="parentCategory">Sub Category:</label>
+              <select
+                class="form-control"
+                id="subCategory"
+                name="subCategoryId"
+                [(ngModel)]="subCategoryId"
+                (ngModelChange)="onSelect($event)"
+              >
+                <option [ngValue]="''">Seçiniz</option>
+                <option
+                  *ngFor="let category of subcategoriesList"
+                  [ngValue]="category.categoryId"
+                >
+                  {{ category.name }}
+                </option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              Create Category
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SubModel -->
+<div
+  class="modal fade bd-example-modal-lg"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myLargeModalLabel"
+  aria-hidden="true"
+  *ngIf="openSubModal"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myLargeModalLabel">
+          Show/Add Sub Category
+        </h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <p-table
+            [value]="subcategoriesList"
+            [lazy]="true"
+            responsiveLayout="scroll"
+            [paginator]="true"
+            [rows]="10"
+            [totalRecords]="subcategoriesList.length"
+            [loading]="subcategoriesList ? false : true"
+            [globalFilterFields]="['name']"
+            class="m-5"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th pSortableColumn="name">
+                  CategoryName <p-sortIcon field="name"></p-sortIcon>
+                </th>
+                <th pSortableColumn="name">
+                  Sub category <p-sortIcon field="name"></p-sortIcon>
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-category>
+              <tr>
+                <td>{{ category.name }}</td>
+                <td></td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

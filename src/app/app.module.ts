@@ -14,21 +14,31 @@ import { ButtonModule } from 'primeng/button';
 import { ProductsComponent } from './components/products/products.component';
 import { TableModule } from 'primeng/table';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CategoryComponent } from './components/category/category.component';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, ProductsComponent],
+  declarations: [
+    AppComponent,
+    NavbarComponent,
+    ProductsComponent,
+    CategoryComponent,
+  ],
   imports: [
     BrowserModule,
     MenubarModule,
     MegaMenuModule,
     TableModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     ButtonModule,
     TabViewModule,
     AppRoutingModule,
   ],
-  providers: [],
+  providers: [[{ provide: LocationStrategy, useClass: HashLocationStrategy }]],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -19,6 +19,11 @@ export class NavbarComponent implements OnInit {
         routerLink: '/products',
       },
       {
+        label: 'Category',
+        icon: 'pi pi-fw pi-file',
+        routerLink: '/category',
+      },
+      {
         label: 'Edit',
         icon: 'pi pi-fw pi-pencil',
       },
