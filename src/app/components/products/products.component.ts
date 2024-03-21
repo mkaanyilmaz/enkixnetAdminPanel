@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Category, Product } from 'src/app/interfaces/interfaces';
 import { CategoryService } from 'src/app/services/category.service';
 import { ProductService } from 'src/app/services/product.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-products',
@@ -12,31 +12,27 @@ import { ProductService } from 'src/app/services/product.service';
 export class ProductsComponent implements OnInit {
   products: Product[] = [];
   openModel: boolean = false;
-  productForm = new FormGroup({
-    productName: new FormControl('', Validators.required),
-    productPrice: new FormControl('', Validators.required),
-    productDescription: new FormControl('', Validators.required),
-  });
   categoryName: string = '';
   categoryId: number;
   parentCategoryId: number;
   categories: Category[] = [];
-  product: Product = {
-    productName: '',
-    price: 0,
-  };
+  product = new Product();
+  selectedFiles: FileList | null = null;
+  baseUrl = environment.apiUrl;
 
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(environment.apiUrl);
+    this.loadProducts();
+  }
 
   loadProducts = () => {
     this.productService.getProductList().subscribe((data) => {
       this.products = data;
-      console.warn(data);
     });
   };
 
@@ -51,16 +47,27 @@ export class ProductsComponent implements OnInit {
     console.log(event);
   }
 
-  onSubmit(): void {
-    const newProduct: Product = {
-      productName: this.product.productName,
-      price: this.product.price,
-      description: this.product.description,
-      categoryId: this.categoryId,
-    };
+  onFileChanged(event: any): void {
+    this.selectedFiles = event.target.files;
+    console.warn(this.selectedFiles);
+  }
 
-    this.productService.createProduct(newProduct).subscribe(
+  // onSubmit() fonksiyonu
+  onSubmit(): void {
+    const formData: FormData = new FormData();
+    formData.append('productName', this.product.productName);
+    formData.append('price', this.product.price.toString());
+    formData.append('description', this.product.description);
+    formData.append('categoryId', this.product.categoryId.toString());
+    for (let i = 0; i < this.selectedFiles.length; i++) {
+      formData.append('images', this.selectedFiles[i]);
+    }
+
+    console.warn(formData);
+
+    this.productService.createProduct(formData).subscribe(
       (response) => {
+        this.openModel = false;
         this.loadProducts();
         console.log('Product created successfully:', response);
         // Burada eklenen ürün hakkında kullanıcıya bir geri bildirim sağlayabilirsiniz
@@ -72,10 +79,5 @@ export class ProductsComponent implements OnInit {
     );
   }
 
-  addProduct = () => {
-    // this.productService.addProduct(this.productForm.value).subscribe((data) => {
-    //   this.loadProducts(null);
-    //   this.openModel = false;
-    // });
-  };
+  addProduct = () => {};
 }

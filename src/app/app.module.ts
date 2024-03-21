@@ -7,16 +7,17 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Import the BrowserAnimationsModule
 
-import { MenubarModule } from 'primeng/menubar';
-import { MegaMenuModule } from 'primeng/megamenu';
-import { TabViewModule } from 'primeng/tabview';
-import { ButtonModule } from 'primeng/button';
-import { ProductsComponent } from './components/products/products.component';
-import { TableModule } from 'primeng/table';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { MegaMenuModule } from 'primeng/megamenu';
+import { MenubarModule } from 'primeng/menubar';
+import { TableModule } from 'primeng/table';
+import { TabViewModule } from 'primeng/tabview';
 import { CategoryComponent } from './components/category/category.component';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { ProductsComponent } from './components/products/products.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,9 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     MenubarModule,
     MegaMenuModule,
     TableModule,
+    DialogModule,
     HttpClientModule,
+    DropdownModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
@@ -38,7 +41,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     TabViewModule,
     AppRoutingModule,
   ],
-  providers: [[{ provide: LocationStrategy, useClass: HashLocationStrategy }]],
+  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

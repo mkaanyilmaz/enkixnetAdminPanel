@@ -3,10 +3,15 @@ export interface Category {
   name: string;
   parentCategoryId?: number | null;
 }
-export interface Product {
-  productId?: number;
+export class Product {
   productName: string;
   price: number;
-  description?: string;
-  categoryId?: number;
+  description: string;
+  categoryId: number;
+  images: File[];
+}
+
+export interface ProductRequest {
+  product: Product;
+  images: string[];
 }
